@@ -5,6 +5,9 @@ from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 import numpy as np
 
+# 32-bit counter maximum value
+U32_MAX = 2**32
+
 def parse_data_file(filename):
     with open(filename, 'r') as f:
         lines = [line.strip() for line in f.readlines() if line.strip()]
@@ -41,10 +44,10 @@ def create_timeseries_histogram(start_timestamp, counters, bin_width=1.0):
     prev_counter = counters[0]
     
     for counter in counters[1:]:
-        # Handle rollover (assuming 32-bit counter)
+        # Handle rollover (32-bit counter)
         if counter < prev_counter:
             # Counter rolled over
-            delta = (2**32 - prev_counter) + counter
+            delta = (U32_MAX - prev_counter) + counter
         else:
             delta = counter - prev_counter
         

@@ -4,6 +4,9 @@ import numpy as np
 from datetime import datetime, timedelta
 import random
 
+# 32-bit counter maximum value
+U32_MAX = 2**32
+
 def generate_square_wave_data(t_start, t_end, frequency, rate_high, rate_low, duty_cycle, device_name="TEST01"):
     """
     Generate synthetic microsecond counter data following a square wave pattern.
@@ -68,7 +71,7 @@ def generate_square_wave_data(t_start, t_end, frequency, rate_high, rate_low, du
             microsecond_counter += microseconds_elapsed
             
             # Handle 32-bit counter rollover
-            microsecond_counter = microsecond_counter % (2**32)
+            microsecond_counter = microsecond_counter % U32_MAX
             
             events.append(microsecond_counter)
     
