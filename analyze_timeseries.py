@@ -23,13 +23,19 @@ def parse_data_file(filename):
     start_timestamp = datetime.strptime(timestamp_match.group(1), '%Y-%m-%d %H:%M:%S')
     device_name = device_match.group(1) if device_match else "Unknown"
     
-    # Parse microsecond counters
+    # Parse microsecond counters (extract last column as 32-bit counter)
     counters = []
     for line in lines[1:]:
         try:
-            counter = int(line)
-            counters.append(counter)
-        except ValueError:
+            # Split line by whitespace and take the last column
+            columns = line.split()
+            if columns:
+                # Take the last column as the microsecond counter
+                counter = int(columns[-1])
+                # Validate it's a reasonable 32-bit value
+                if 0 <= counter < U32_MAX:
+                    counters.append(counter)
+        except (ValueError, IndexError):
             continue
     
     return start_timestamp, device_name, counters
